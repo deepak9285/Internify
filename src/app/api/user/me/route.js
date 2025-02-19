@@ -1,18 +1,18 @@
 const { connectDb } = require("@/utils/connectDb");
 import User from "@/models/user.model";
-import bcryptjs from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
-
 export async function POST(request) {
+
     connectDb();
+
 
   try {
     const req = await request.json();
-    const { email, password } = req;
+    const { email } = req;
 
     const user = await User.findOne({
-      email,
+      email
     });
 
     if (!user) {
@@ -26,21 +26,8 @@ export async function POST(request) {
       );
     }
 
-    const isPasswordValid = await bcryptjs.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      return NextResponse.json(
-        {
-          error: "Invalid password",
-        },
-        {
-          status: 401,
-        }
-      );
-    }
-
     return NextResponse.json({
-      message: "Login successful",
+      message: "User found",
       success: true,
       user,
     });
