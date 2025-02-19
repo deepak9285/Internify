@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
         github_username: String,
         role: {
             type: String,
-            enum: ['admin', 'user', 'mentor'],
+            enum: ['admin', 'user', 'pm'],
             default: 'user',
         },
         college_id: {
