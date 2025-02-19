@@ -1,10 +1,10 @@
-import { connectDb } from "@/db/db";
 import User from "@/models/user.model";
 import { transporter } from "@/utils/mailer";
 import bcryptjs from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import Otp from "@/models/otp.model";
 import { encrypt, decrypt } from "@/utils/cryptoUtils";
+import { connectDb } from "@/utils/connectDb";
 
 connectDb();
 
