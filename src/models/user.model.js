@@ -56,6 +56,10 @@ const userSchema = new mongoose.Schema(
                 ref: 'Task',
             },
         ],
+        isDeleted: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,
