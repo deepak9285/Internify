@@ -30,4 +30,4 @@ const CertificateSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Certificate', CertificateSchema);
+export default mongoose.models.Certificate || mongoose.model("Certificate", CertificateSchema);
