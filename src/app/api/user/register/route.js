@@ -5,9 +5,7 @@ import bcryptjs from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import Otp from "@/models/otp.model";
 import { encrypt, decrypt } from "@/utils/cryptoUtils";
-
 connectDb();
-
 export async function signup(request) {
   try {
     const req = await request.json();
