@@ -14,6 +14,11 @@ const ProjectSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    documents: [
+      {
+        type: String,
+      },
+    ],
     company_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
@@ -43,4 +48,5 @@ const ProjectSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Project || mongoose.model("Project", ProjectSchema);
+export default mongoose.models.Project ||
+  mongoose.model("Project", ProjectSchema);

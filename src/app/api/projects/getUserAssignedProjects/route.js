@@ -3,11 +3,12 @@ import Project from "@/models/Projects.model";
 
 import { connectDb } from "@/utils/connectDb";
 import { NextResponse } from "next/server";
-export async function GET(req, { params }) {
+export async function POST(req) {
     await connectDb();
     
     try {
-      const { userId } = params;
+
+      const { userId } = req.body;
       
       if (!userId) {
         return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
