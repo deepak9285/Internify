@@ -1,5 +1,5 @@
 export async function createProject(projectData) {
-    const res = await fetch("/api/projects", {
+    const res = await fetch("/api/projects/createProject", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(projectData),

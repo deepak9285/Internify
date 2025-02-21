@@ -36,7 +36,6 @@ const ProjectSchema = new mongoose.Schema(
     company_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
-      required: true,
     },
     skills_required: {
       type: [String],
@@ -52,7 +51,6 @@ const ProjectSchema = new mongoose.Schema(
     },
     RemainingMembers:{
       type:Number,
-      required:true,
     },
     assigned_students: [
       {
@@ -66,6 +64,10 @@ const ProjectSchema = new mongoose.Schema(
         ref: "TaskProgress",
       },
     ],
+    admin:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }
   },
   { timestamps: true }
 );
