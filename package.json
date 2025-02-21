@@ -9,8 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@radix-ui/react-slot": "^1.1.2",
     "alias": "^0.0.5",
+=======
+    "@radix-ui/react-label": "^2.1.2",
+    "@radix-ui/react-slot": "^1.1.2",
+>>>>>>> bd2fb5ef16cf119bf991175f0a38897b3271c1c2
     "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
