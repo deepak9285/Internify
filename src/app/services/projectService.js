@@ -8,7 +8,7 @@ export async function createProject(projectData) {
     return await res.json();
 }
 export async function getProjects() {
-    const res = await fetch(`http://localhost:3001/api/projects/getAllProjects`);
+    const res = await fetch(`http://localhost:3002/api/projects/getAllProjects`);
     return res.json();
 }
 
