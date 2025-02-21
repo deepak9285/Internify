@@ -19,6 +19,20 @@ const ProjectSchema = new mongoose.Schema(
         type: String,
       },
     ],
+    repo: {
+      name: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
+      owner:{
+        type: String,
+        required: true
+      }
+    },
     company_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
