@@ -12,7 +12,7 @@ export async function POST(request) {
   try {
     const req = await request.json();
     // const reqBody = decrypt(req?.data);
-    const { name, email, password, mobile, github_username,  skills, level, profile_picture, bio } = req;
+    const { name, email, password, mobile, github_username, role,  skills, level, profile_picture, bio } = req;
     
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -28,8 +28,7 @@ export async function POST(request) {
       email,
       password: hashedPassword,
       mobile,
-      type: 'student',
-      role : "user",
+      role : role,
       github_username,
       profile: {
         bio: bio,

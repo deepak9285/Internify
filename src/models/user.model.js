@@ -2,11 +2,7 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema(
     {
-        type: {
-            type: String,
-            enum: ['student', 'college', 'company'],
-            required: true,
-        },
+        
         name: {
             type: String,
             required: true,
@@ -23,7 +19,7 @@ const userSchema = new mongoose.Schema(
         github_username: String,
         role: {
             type: String,
-            enum: ['admin', 'user', 'pm'],
+            enum: ['admin', 'user'],
             default: 'user',
         },
         college_id: {
@@ -31,7 +27,7 @@ const userSchema = new mongoose.Schema(
             ref: 'College',
         },
         company_id: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types. ObjectId,
             ref: 'Company',
         },
         profile: {
