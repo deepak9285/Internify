@@ -39,7 +39,6 @@ const animations = {
   }
 };
 
-// Component for nav items to reduce repetition
 const NavItem = ({ icon: Icon, label, onClick, active }) => (
   <Button 
     variant="ghost" 
