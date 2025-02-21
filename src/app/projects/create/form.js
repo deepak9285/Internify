@@ -1,13 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { createProject } from "@/app/services/projectService";
+import { useRouter } from "next/navigation"; // Redirect after form submission
 
 export default function ProjectForm() {
+  const router = useRouter();
+
   const [form, setForm] = useState({
     title: "",
     description: "",
     industry: "",
-    documents: [], // Store file names
+    documents: [],
     company_id: "",
     repo: { name: "", url: "", owner: "" },
     skills_required: "",
@@ -15,7 +19,8 @@ export default function ProjectForm() {
     TotalTeamMembersRequired: "",
   });
 
-  const [filePreview, setFilePreview] = useState([]); // Store file preview URLs
+  const [filePreview, setFilePreview] = useState([]);
+  const [loading, setLoading] = useState(false); // For button state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,123 +39,60 @@ export default function ProjectForm() {
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
 
-    // Store file names
     setForm((prev) => ({
       ...prev,
       documents: files.map((file) => file.name),
     }));
 
-    // Generate file previews (for images/PDFs)
     const fileURLs = files.map((file) => URL.createObjectURL(file));
     setFilePreview(fileURLs);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Convert skills into an array
     const formattedData = {
       ...form,
-      skills_required: form.skills_required.split(",").map((s) => s.trim()),
+      skills_required: form.skills_required.split(",").map((s) => s.trim()), 
     };
 
-    console.log("Project Data:", formattedData);
+    try {
+      const response = await createProject(formattedData);
+      if (response.success) {
+        alert("Project Created Successfully!");
+        router.push("/projects"); 
+      } else {
+        alert("Failed to create project: " + response.error);
+      }
+    } catch (error) {
+      alert("Error creating project: " + error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input
-        type="text"
-        name="title"
-        placeholder="Project Title"
-        className="w-full p-2 border"
-        onChange={handleChange}
-        required
-      />
-      <textarea
-        name="description"
-        placeholder="Project Description"
-        className="w-full p-2 border"
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="industry"
-        placeholder="Industry"
-        className="w-full p-2 border"
-        onChange={handleChange}
-        required
-      />
+      <input type="text" name="title" placeholder="Project Title" className="w-full p-2 border" onChange={handleChange} required />
+      <textarea name="description" placeholder="Project Description" className="w-full p-2 border" onChange={handleChange} required />
+      <input type="text" name="industry" placeholder="Industry" className="w-full p-2 border" onChange={handleChange} required />
 
       <h3 className="text-lg font-semibold mt-4">Company & Team</h3>
-      <input
-        type="text"
-        name="company_id"
-        placeholder="Company ID"
-        className="w-full p-2 border"
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="number"
-        name="TotalTeamMembersRequired"
-        placeholder="Total Team Members Required"
-        className="w-full p-2 border"
-        onChange={handleChange}
-        required
-      />
+      <input type="text" name="company_id" placeholder="Company ID" className="w-full p-2 border" onChange={handleChange} required />
+      <input type="number" name="TotalTeamMembersRequired" placeholder="Total Team Members Required" className="w-full p-2 border" onChange={handleChange} required />
 
       <h3 className="text-lg font-semibold mt-4">GitHub Repository</h3>
-      <input
-        type="text"
-        name="repo.name"
-        placeholder="Repo Name"
-        className="w-full p-2 border"
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="repo.url"
-        placeholder="Repo URL"
-        className="w-full p-2 border"
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="repo.owner"
-        placeholder="Repo Owner"
-        className="w-full p-2 border"
-        onChange={handleChange}
-        required
-      />
+      <input type="text" name="repo.name" placeholder="Repo Name" className="w-full p-2 border" onChange={handleChange} required />
+      <input type="text" name="repo.url" placeholder="Repo URL" className="w-full p-2 border" onChange={handleChange} required />
+      <input type="text" name="repo.owner" placeholder="Repo Owner" className="w-full p-2 border" onChange={handleChange} required />
 
       <h3 className="text-lg font-semibold mt-4">Skills & Deadline</h3>
-      <input
-        type="text"
-        name="skills_required"
-        placeholder="Required Skills (comma-separated)"
-        className="w-full p-2 border"
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="date"
-        name="deadline"
-        className="w-full p-2 border"
-        onChange={handleChange}
-        required
-      />
+      <input type="text" name="skills_required" placeholder="Required Skills (comma-separated)" className="w-full p-2 border" onChange={handleChange} required />
+      <input type="date" name="deadline" className="w-full p-2 border" onChange={handleChange} required />
 
       <h3 className="text-lg font-semibold mt-4">Upload Project Documents</h3>
-      <input
-        type="file"
-        multiple
-        className="w-full p-2 border"
-        onChange={handleFileChange}
-      />
+      <input type="file" multiple className="w-full p-2 border" onChange={handleFileChange} />
 
       {filePreview.length > 0 && (
         <div className="mt-4">
@@ -158,17 +100,15 @@ export default function ProjectForm() {
           <ul>
             {filePreview.map((url, index) => (
               <li key={index} className="text-blue-500">
-                <a href={url} target="_blank" rel="noopener noreferrer">
-                  {form.documents[index]}
-                </a>
+                <a href={url} target="_blank" rel="noopener noreferrer">{form.documents[index]}</a>
               </li>
             ))}
           </ul>
         </div>
       )}
 
-      <button type="submit" className="w-full p-3 bg-blue-600 text-white font-semibold rounded">
-        Create Project
+      <button type="submit" className="w-full p-3 bg-blue-600 text-white font-semibold rounded" disabled={loading}>
+        {loading ? "Creating Project..." : "Create Project"}
       </button>
     </form>
   );

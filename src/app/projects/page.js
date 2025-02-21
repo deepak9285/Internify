@@ -1,8 +1,9 @@
-import { getProjects } from "@/services/projectService";
-import ProjectCard from "@/components/ProjectCard";
+import { getProjects } from "@/app/services/projectService";
+import ProjectCard from "@/components/projects/ProjectCard";
 
 export default async function ProjectsPage() {
     const projects = await getProjects();
+    console.log("projects",projects);
 
     return (
         <div className="max-w-4xl mx-auto mt-10">

@@ -8,7 +8,7 @@ export async function POST(req) {
     
     await connectDb()
 
-    // Parse request body
+   
     const body = await req.json();
 
     const requiredFields = [

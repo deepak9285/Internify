@@ -8,7 +8,7 @@ export async function createProject(projectData) {
     return await res.json();
 }
 export async function getProjects() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects/getAllProjects`);
     return res.json();
 }
 
