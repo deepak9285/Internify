@@ -1,7 +1,7 @@
 // app/api/projects/[id]/route.js
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
-import { connectDb } from "@/utils/connectDb";
+import { connectDB } from "@/utils/connectDb";
 import ProjectsModel from "@/models/Projects.model";
 
 //Delete - Delete a project
@@ -11,7 +11,7 @@ import ProjectsModel from "@/models/Projects.model";
 
 export async function DELETE(req, { params }) {
   try {
-    await connectDb();
+    await connectDB();
 
     const { id } = params;
 
@@ -63,7 +63,7 @@ export async function DELETE(req, { params }) {
 // Get single project by ID
 export async function GET(req, { params }) {
   try {
-    await connectDb();
+    await connectDB();
 
 
     const { id } = params;
@@ -105,7 +105,7 @@ export async function GET(req, { params }) {
 export async function PUT(req, { params }) {
   try {
     // Connect to database
-    await connectDb();
+    await connectDB();
 
     const { id } = params;
 
