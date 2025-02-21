@@ -1,15 +1,17 @@
-const { connectDb } = require("@/utils/connectDb");
+const {  connectDB } = require("@/utils/connectDb");
 import User from "@/models/user.model";
 import bcryptjs from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
 
 export async function POST(request) {
-    connectDb();
+    connectDB();
 
   try {
     const req = await request.json();
     const { email, password } = req;
+
+    console.log(email, password);
 
     const user = await User.findOne({
       email,

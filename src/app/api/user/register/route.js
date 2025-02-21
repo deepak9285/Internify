@@ -1,17 +1,18 @@
 import User from "@/models/user.model";
+import { connectDB } from "@/utils/connectDb";
 import bcryptjs from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 // import Otp from "@/models/otp.model";
 // import { encrypt, decrypt } from "@/utils/cryptoUtils";
-import { connectDb } from "@/utils/connectDb";
-
-connectDb();
 
 export async function POST(request) {
+  connectDB();
+
+
   try {
     const req = await request.json();
     // const reqBody = decrypt(req?.data);
-    const { name, email, password, mobile, type, role, github_username, college_id, company_id, profile, projects, tasks } = req;
+    const { name, email, password, mobile, github_username,  skills, level, profile_picture, bio } = req;
     
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -27,14 +28,15 @@ export async function POST(request) {
       email,
       password: hashedPassword,
       mobile,
-      type,
-      role,
+      type: 'student',
+      role : "user",
       github_username,
-      college_id,
-      company_id,
-      profile,
-      projects,
-      tasks
+      profile: {
+        bio: bio,
+        profile_picture: profile_picture,
+        skills: skills,
+        level: level,
+      },
     });
     const savedUser = await newUser.save();
 
