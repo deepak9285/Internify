@@ -1,3 +1,4 @@
+'use client';
 import { getProjects } from "@/app/services/projectService";
 import ProjectCard from "@/components/projects/ProjectCard";
 
