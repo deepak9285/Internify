@@ -8,7 +8,6 @@ import ProjectsModel from "@/models/Projects.model";
 //Put - Update a project
 //Get - Get a project by ID
 
-
 export async function DELETE(req, { params }) {
   try {
     await connectDB();
@@ -25,14 +24,14 @@ export async function DELETE(req, { params }) {
     // Check if project exists
     const existingProject = await ProjectsModel.findById(id);
     if (!existingProject) {
-      return NextResponse.json(
-        { error: "Project not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
     // Optional: Check if project has active students or tasks
-    if (existingProject.assigned_students.length > 0 || existingProject.tasks.length > 0) {
+    if (
+      existingProject.assigned_students.length > 0 ||
+      existingProject.tasks.length > 0
+    ) {
       return NextResponse.json(
         { error: "Cannot delete project with active students or tasks" },
         { status: 400 }
@@ -43,13 +42,12 @@ export async function DELETE(req, { params }) {
     await ProjectsModel.findByIdAndDelete(id);
 
     return NextResponse.json(
-      { 
+      {
         message: "Project deleted successfully",
-        projectId: id
+        projectId: id,
       },
       { status: 200 }
     );
-
   } catch (error) {
     console.error("Error deleting project:", error);
     return NextResponse.json(
@@ -59,38 +57,33 @@ export async function DELETE(req, { params }) {
   }
 }
 
-
 // Get single project by ID
-export async function GET(req, { params }) {
+export async function POST(req) {
   try {
     await connectDB();
 
+    const { _id } = req.body;
 
-    const { id } = params;
+    // // Validate ObjectId
+    // if (!mongoose.Types.ObjectId.isValid(id)) {
+    //   return NextResponse.json(
+    //     { error: "Invalid project ID" },
+    //     { status: 400 }
+    //   );
+    // }
 
-    // Validate ObjectId
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { error: "Invalid project ID" },
-        { status: 400 }
-      );
-    }
+    console.log(_id);
 
     // Find project and populate references
-    const project = await ProjectsModel.findById(id)
-      .populate('company_id', 'name location')
-      .populate('assigned_students', 'name email')
-      .populate('tasks');
+    const project = await ProjectsModel.findOne(_id)
+      .populate("assigned_students", "name email")
+      .populate("tasks");
 
     if (!project) {
-      return NextResponse.json(
-        { error: "Project not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
     return NextResponse.json({ project });
-
   } catch (error) {
     console.error("Error fetching project:", error);
     return NextResponse.json(
@@ -99,8 +92,6 @@ export async function GET(req, { params }) {
     );
   }
 }
-
-
 
 export async function PUT(req, { params }) {
   try {
@@ -123,10 +114,7 @@ export async function PUT(req, { params }) {
     // Check if project exists
     const existingProject = await ProjectsModel.findById(id);
     if (!existingProject) {
-      return NextResponse.json(
-        { error: "Project not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
     // Validate deadline if it's being updated
@@ -150,11 +138,13 @@ export async function PUT(req, { params }) {
           description: body.description || existingProject.description,
           industry: body.industry || existingProject.industry,
           documents: body.documents || existingProject.documents,
-          skills_required: body.skills_required || existingProject.skills_required,
+          skills_required:
+            body.skills_required || existingProject.skills_required,
           deadline: body.deadline || existingProject.deadline,
-          assigned_students: body.assigned_students || existingProject.assigned_students,
-          tasks: body.tasks || existingProject.tasks
-        }
+          assigned_students:
+            body.assigned_students || existingProject.assigned_students,
+          tasks: body.tasks || existingProject.tasks,
+        },
       },
       { new: true, runValidators: true }
     );
@@ -162,11 +152,10 @@ export async function PUT(req, { params }) {
     return NextResponse.json(
       {
         message: "Project updated successfully",
-        project: updatedProject
+        project: updatedProject,
       },
       { status: 200 }
     );
-
   } catch (error) {
     console.error("Error updating project:", error);
     return NextResponse.json(
