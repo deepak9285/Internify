@@ -17,7 +17,9 @@ export async function POST(req) {
       "industry",
       "company_id",
       "skills_required",
-      "deadline"
+      "deadline",
+      "documents",
+      "repo"
     ];
 
     for (const field of requiredFields) {
@@ -48,7 +50,13 @@ export async function POST(req) {
       skills_required: body.skills_required,
       deadline: deadline,
       assigned_students: body.assigned_students || [],
-      tasks: body.tasks || []
+      tasks: body.tasks || [],
+      documents: body.documents || [],
+      repo: {
+        name: body.repo.name,
+        url: body.repo.url,
+        owner: body.repo.owner
+      }
     });
 
     return NextResponse.json(
