@@ -1,12 +1,15 @@
-import { connectDb } from "@/utils/connectDb";
+
 import Project from "@/models/Projects.model";
+import { connectDB } from "@/utils/connectDb";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    await connectDb();
+    await connectDB();
+
     
-    const projects = await Project.find([{}]); 
+    const projects = await Project.find({}); 
+    console.log(projects);
     
     return NextResponse.json({ success: true, data: projects });
   } catch (error) {
