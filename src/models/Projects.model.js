@@ -46,6 +46,14 @@ const ProjectSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    TotalteamMembersRequired:{
+      type:Number,
+      required:true,
+    },
+    RemainingMembers:{
+      type:Number,
+      required:true,
+    },
     assigned_students: [
       {
         type: mongoose.Schema.Types.ObjectId,
