@@ -56,7 +56,7 @@ export function LoginForm({ className, ...props }) {
       console.log(response.data.user);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       localStorage.setItem('token', response.data.user.token);
-      router.push("/");
+      router.push("/home");
     } catch (error) {
       console.error('Login failed:', error.response ? error.response.data : error.message);
       setError(error.response?.data?.message || 'An error occurred during login.');
@@ -123,7 +123,7 @@ export function LoginForm({ className, ...props }) {
                       id="email"
                       type="email"
                       placeholder="m@example.com"
-                      required
+                      // required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       onFocus={() => handleFocus('email')}
@@ -168,7 +168,7 @@ export function LoginForm({ className, ...props }) {
                       id="password"
                       type="password"
                       placeholder="Enter your password"
-                      required
+                      // required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       onFocus={() => handleFocus('password')}

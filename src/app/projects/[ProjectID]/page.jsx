@@ -89,7 +89,6 @@ const ProjectDetailPage = () => {
 
   const handleApply = () => {
     setIsApplying(true);
-    // Simulate API call
     setTimeout(() => {
       setIsApplying(false);
       setHasApplied(true);
