@@ -68,7 +68,7 @@ export default function HeroSection() {
             <div className="relative aspect-square max-w-lg">
               <div className="absolute inset-0 bg-gradient-to-tr from-blue-400/30 to-blue-300/10 backdrop-blur-xl rounded-2xl">
                 <img
-                  src="assets\AiProject Manager.webp"
+                  src="\loginPic.svg"
                   alt="Project Management Dashboard"
                   className="object-cover rounded-2xl opacity-90"
                 />
