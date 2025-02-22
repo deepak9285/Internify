@@ -64,7 +64,7 @@ export default function AIProjectManager() {
     setLoading(true);
     setResponse(null);
 
-    // Example: map tasks (using task title from tempData)
+    // Map tasks (using task title from tempData)
     const taskDescriptions = tempData.project.tasks
       .map(() => tempData.task.task)
       .join(", ");
@@ -89,218 +89,216 @@ export default function AIProjectManager() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8 space-y-8">
-      <h1 className="text-3xl font-bold text-center">AI Project Manager</h1>
+    <div className="min-h-screen w-full bg-gradient-to-r from-indigo-500 to-purple-600 flex flex-col">
+      {/* Header */}
+      <header className="w-full py-6 text-center">
+        <h1 className="text-4xl font-extrabold text-white">
+          AI Project Manager
+        </h1>
+      </header>
 
-      {/* AI Generated Project Plan Section */}
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow">
-        <p className="mb-4">
-          Click the button below to generate a comprehensive project plan using Gemini’s AI.
-        </p>
-        <button
-          onClick={generateProjectPlan}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-          disabled={loading}
-        >
-          {loading ? "Generating..." : "Generate Project Plan"}
-        </button>
-        {response && (
-          <>
-            <div className="mt-6">
-              <h2 className="text-2xl font-semibold mb-4">Generated Project Plan:</h2>
-              
-            </div>
-            {/* Only show the table once we have a response */}
-            <ProjectPlanTable />
-          </>
-        )}
-      </div>
+      {/* Main Content */}
+      <main className="flex-grow bg-white rounded-t-3xl p-8 shadow-lg">
+        <div className="max-w-4xl mx-auto">
+          <p className="mb-8 text-center text-lg text-gray-700">
+            Generate a comprehensive project plan using Gemini’s AI.
+            Click the button below to get started.
+          </p>
+          <div className="flex justify-center">
+            <button
+              onClick={generateProjectPlan}
+              className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition duration-300"
+              disabled={loading}
+            >
+              {loading && (
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  ></path>
+                </svg>
+              )}
+              <span>{loading ? "Generating..." : "Generate Project Plan"}</span>
+            </button>
+          </div>
+          {response && (
+            <>
+              <section className="mt-12">
+                <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+                  Project Plan Details
+                </h2>
+                <ProjectPlanTable />
+              </section>
+              <section className="mt-12">
+                <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+                  Generated Project Plan
+                </h2>
+                <div className="prose prose-lg max-w-none">
+                  <ReactMarkdown>{response}</ReactMarkdown>
+                </div>
+              </section>
+            </>
+          )}
+        </div>
+      </main>
     </div>
   );
 }
 
 function ProjectPlanTable() {
   return (
-    <div className="overflow-x-auto p-4 bg-gray-100">
-      <table className="min-w-full divide-y divide-gray-200 bg-white shadow rounded">
-        <thead className="bg-gray-50">
+    <div className="overflow-x-auto">
+      <table className="min-w-full text-sm text-left text-gray-700">
+        <thead className="bg-gray-200">
           <tr>
-            <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Field
-            </th>
-            <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Type
-            </th>
-            <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Description
-            </th>
-            <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Example
-            </th>
+            <th className="px-4 py-2">Field</th>
+            <th className="px-4 py-2">Type</th>
+            <th className="px-4 py-2">Description</th>
+            <th className="px-4 py-2">Example</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200">
-          {/* Project Information */}
+        <tbody className="bg-white divide-y divide-gray-200">
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Project Name</td>
-            <td className="px-2 py-2 whitespace-nowrap">Text</td>
-            <td className="px-2 py-2 whitespace-nowrap">Name of the project</td>
-            <td className="px-2 py-2 whitespace-nowrap">AI-Powered Resume Analyzer</td>
+            <td className="px-4 py-2">Project Name</td>
+            <td className="px-4 py-2">Text</td>
+            <td className="px-4 py-2">Name of the project</td>
+            <td className="px-4 py-2">AI-Powered Resume Analyzer</td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Project Goal</td>
-            <td className="px-2 py-2 whitespace-nowrap">Text</td>
-            <td className="px-2 py-2 whitespace-nowrap">Overall objective of the project</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              To develop an AI-powered system that analyzes resumes and provides insightful feedback to improve candidate applications.
+            <td className="px-4 py-2">Project Goal</td>
+            <td className="px-4 py-2">Text</td>
+            <td className="px-4 py-2">Overall objective of the project</td>
+            <td className="px-4 py-2">
+              To develop an AI-powered system that analyzes resumes and provides insightful feedback.
             </td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Project Deadline</td>
-            <td className="px-2 py-2 whitespace-nowrap">Date</td>
-            <td className="px-2 py-2 whitespace-nowrap">Target completion date</td>
-            <td className="px-2 py-2 whitespace-nowrap">2025-06-15</td>
+            <td className="px-4 py-2">Project Deadline</td>
+            <td className="px-4 py-2">Date</td>
+            <td className="px-4 py-2">Target completion date</td>
+            <td className="px-4 py-2">2025-06-15</td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Project Manager</td>
-            <td className="px-2 py-2 whitespace-nowrap">Text</td>
-            <td className="px-2 py-2 whitespace-nowrap">Name of the project manager</td>
-            <td className="px-2 py-2 whitespace-nowrap">[Your Name]</td>
+            <td className="px-4 py-2">Project Manager</td>
+            <td className="px-4 py-2">Text</td>
+            <td className="px-4 py-2">Name of the project manager</td>
+            <td className="px-4 py-2">[Your Name]</td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Team Size</td>
-            <td className="px-2 py-2 whitespace-nowrap">Number</td>
-            <td className="px-2 py-2 whitespace-nowrap">Total number of team members</td>
-            <td className="px-2 py-2 whitespace-nowrap">5</td>
+            <td className="px-4 py-2">Team Size</td>
+            <td className="px-4 py-2">Number</td>
+            <td className="px-4 py-2">Total number of team members</td>
+            <td className="px-4 py-2">5</td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Team Members</td>
-            <td className="px-2 py-2 whitespace-nowrap">List</td>
-            <td className="px-2 py-2 whitespace-nowrap">Names of team members (including unassigned)</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Member 1, Member 2, Member 3, [Unassigned], [Unassigned]
-            </td>
+            <td className="px-4 py-2">Team Members</td>
+            <td className="px-4 py-2">List</td>
+            <td className="px-4 py-2">Names of team members (including unassigned)</td>
+            <td className="px-4 py-2">Member 1, Member 2, Member 3, [Unassigned], [Unassigned]</td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Required Skills</td>
-            <td className="px-2 py-2 whitespace-nowrap">List</td>
-            <td className="px-2 py-2 whitespace-nowrap">Technical skills needed for the project</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Python, NLP, Machine Learning, UI/UX Design
-            </td>
+            <td className="px-4 py-2">Required Skills</td>
+            <td className="px-4 py-2">List</td>
+            <td className="px-4 py-2">Technical skills needed for the project</td>
+            <td className="px-4 py-2">Python, NLP, Machine Learning, UI/UX Design</td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Project Documents</td>
-            <td className="px-2 py-2 whitespace-nowrap">List</td>
-            <td className="px-2 py-2 whitespace-nowrap">Links to relevant project documentation</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              <a
-                href="https://example.com/project-doc1.pdf"
-                className="text-blue-500 hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                https://example.com/project-doc1.pdf
+            <td className="px-4 py-2">Project Documents</td>
+            <td className="px-4 py-2">List</td>
+            <td className="px-4 py-2">Links to relevant project documentation</td>
+            <td className="px-4 py-2">
+              <a href="https://example.com/project-doc1.pdf" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                Document 1
               </a>,{" "}
-              <a
-                href="https://example.com/project-doc2.pdf"
-                className="text-blue-500 hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                https://example.com/project-doc2.pdf
+              <a href="https://example.com/project-doc2.pdf" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                Document 2
               </a>
             </td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Project Repository</td>
-            <td className="px-2 py-2 whitespace-nowrap">URL</td>
-            <td className="px-2 py-2 whitespace-nowrap">Link to the project's source code repository</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              <a
-                href="https://github.com/example/resume-analyzer"
-                className="text-blue-500 hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                https://github.com/example/resume-analyzer
+            <td className="px-4 py-2">Project Repository</td>
+            <td className="px-4 py-2">URL</td>
+            <td className="px-4 py-2">Link to the project's source code repository</td>
+            <td className="px-4 py-2">
+              <a href="https://github.com/example/resume-analyzer" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                GitHub Repository
               </a>
             </td>
           </tr>
-          {/* Project Phases */}
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Phase 1: Requirements Gathering &amp; Design (Start Date: 2024-06-15, End Date: 2024-09-15)
+            <td className="px-4 py-2">
+              Phase 1: Requirements Gathering &amp; Design (Start: 2024-06-15, End: 2024-09-15)
             </td>
-            <td className="px-2 py-2 whitespace-nowrap">Section</td>
-            <td className="px-2 py-2 whitespace-nowrap">Description of the phase</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Define project scope, detailed specifications, UI/UX design, database schema design, and initial architecture.
+            <td className="px-4 py-2">Section</td>
+            <td className="px-4 py-2">Define project scope, detailed specs, UI/UX design, and initial architecture.</td>
+            <td className="px-4 py-2">
+              Documentation, UI Mockups, Database Schema, Architecture Diagram
             </td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Phase 1 Tasks</td>
-            <td className="px-2 py-2 whitespace-nowrap">List</td>
-            <td className="px-2 py-2 whitespace-nowrap">Tasks within Phase 1</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Detailed Requirements Document, Database Design, UI/UX Mockups, System Architecture Diagram
+            <td className="px-4 py-2">Phase 1 Tasks</td>
+            <td className="px-4 py-2">List</td>
+            <td className="px-4 py-2">Tasks within Phase 1</td>
+            <td className="px-4 py-2">
+              Requirements Document, Database Design, UI/UX Mockups, Architecture Diagram
             </td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Phase 2: Development (Start Date: 2024-09-16, End Date: 2025-03-15)
+            <td className="px-4 py-2">
+              Phase 2: Development (Start: 2024-09-16, End: 2025-03-15)
             </td>
-            <td className="px-2 py-2 whitespace-nowrap">Section</td>
-            <td className="px-2 py-2 whitespace-nowrap">Description of the phase</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Implement the AI model, develop the backend and frontend, integrate the NLP and ML components.
-            </td>
-          </tr>
-          <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Phase 2 Tasks</td>
-            <td className="px-2 py-2 whitespace-nowrap">List</td>
-            <td className="px-2 py-2 whitespace-nowrap">Tasks within Phase 2</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Data Collection and Preprocessing, NLP Model Development, ML Model Training and Evaluation, Backend API Development, Frontend Development, Integration Testing
+            <td className="px-4 py-2">Section</td>
+            <td className="px-4 py-2">Develop AI model, backend, frontend, and integrate NLP/ML components.</td>
+            <td className="px-4 py-2">
+              Data Collection, Model Training, API Development, Frontend Integration
             </td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Phase 3: Testing and Deployment (Start Date: 2025-03-16, End Date: 2025-06-15)
-            </td>
-            <td className="px-2 py-2 whitespace-nowrap">Section</td>
-            <td className="px-2 py-2 whitespace-nowrap">Description of the phase</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Thorough testing (unit, integration, system), bug fixing, deployment to a production environment.
+            <td className="px-4 py-2">Phase 2 Tasks</td>
+            <td className="px-4 py-2">List</td>
+            <td className="px-4 py-2">Tasks within Phase 2</td>
+            <td className="px-4 py-2">
+              Data Collection, NLP Model, ML Training, API, Frontend, Integration Testing
             </td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Phase 3 Tasks</td>
-            <td className="px-2 py-2 whitespace-nowrap">List</td>
-            <td className="px-2 py-2 whitespace-nowrap">Tasks within Phase 3</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Unit Testing, Integration Testing, System Testing, User Acceptance Testing (UAT), Deployment, Documentation
+            <td className="px-4 py-2">
+              Phase 3: Testing and Deployment (Start: 2025-03-16, End: 2025-06-15)
             </td>
-          </tr>
-          {/* Risk & Communication */}
-          <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Risk Management</td>
-            <td className="px-2 py-2 whitespace-nowrap">Section</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Potential risks and mitigation strategies.
-            </td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Data bias in training data (Mitigation: careful data selection and bias detection techniques), Model accuracy issues (Mitigation: rigorous testing and model tuning), Project delays (Mitigation: Agile methodology, regular progress monitoring)
+            <td className="px-4 py-2">Section</td>
+            <td className="px-4 py-2">Test, fix bugs, and deploy to production.</td>
+            <td className="px-4 py-2">
+              Unit Testing, Integration Testing, UAT, Deployment, Documentation
             </td>
           </tr>
           <tr>
-            <td className="px-2 py-2 whitespace-nowrap">Communication Plan</td>
-            <td className="px-2 py-2 whitespace-nowrap">Section</td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              How communication will be managed within the team and with stakeholders.
+            <td className="px-4 py-2">Risk Management</td>
+            <td className="px-4 py-2">Section</td>
+            <td className="px-4 py-2">Potential risks and mitigation strategies.</td>
+            <td className="px-4 py-2">
+              Data bias, model accuracy, project delays (Mitigations: careful data selection, testing, Agile practices)
             </td>
-            <td className="px-2 py-2 whitespace-nowrap">
-              Weekly team meetings, progress reports, regular updates to stakeholders.
+          </tr>
+          <tr>
+            <td className="px-4 py-2">Communication Plan</td>
+            <td className="px-4 py-2">Section</td>
+            <td className="px-4 py-2">Plan for team and stakeholder communication.</td>
+            <td className="px-4 py-2">
+              Weekly meetings, progress reports, stakeholder updates.
             </td>
           </tr>
         </tbody>
@@ -308,6 +306,3 @@ function ProjectPlanTable() {
     </div>
   );
 }
-
-
-
