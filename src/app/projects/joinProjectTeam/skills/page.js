@@ -1,16 +1,28 @@
 'use client'
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Fix: Use `next/navigation` instead of `next/router`
+import { useRouter } from "next/navigation";
+import axios from 'axios';
 
 const skills = ["React.js", "Node.js", "Figma", "Python", "AI"];
 
 export default function JoinProject() {
   const [selectedSkill, setSelectedSkill] = useState("");
-  const router = useRouter(); // Ensure router is available
+  const [aiResponse, setAiResponse] = useState("");
+  const router = useRouter();
 
   const handleNext = () => {
     if (selectedSkill) {
-      router.push('/SkillTest'); // Fix: Encode skill in URL
+      router.push('/SkillTest');
+    }
+  };
+
+  const handleSkillSelect = async (skill) => {
+    setSelectedSkill(skill);
+    try {
+      const response = await axios.post('/api/generate-response', { prompt: `Tell me about ${skill}` });
+      setAiResponse(response.data.text);
+    } catch (error) {
+      console.error("Error fetching AI response:", error);
     }
   };
 
@@ -27,12 +39,17 @@ export default function JoinProject() {
                 ? "bg-blue-600 text-white shadow-lg"
                 : "bg-white hover:bg-gray-200"
             }`}
-            onClick={() => setSelectedSkill(skill)}
+            onClick={() => handleSkillSelect(skill)}
           >
             {skill}
           </button>
         ))}
       </div>
+      {aiResponse && (
+        <div className="mt-4 p-4 bg-white rounded-lg shadow-md">
+          <p className="text-gray-800">{aiResponse}</p>
+        </div>
+      )}
       <button
         className={`mt-6 px-6 py-3 text-lg font-medium rounded-lg transition ${
           selectedSkill
