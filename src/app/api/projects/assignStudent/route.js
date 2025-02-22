@@ -1,21 +1,28 @@
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
-import { connectDb } from "@/utils/connectDb";
 import User from "@/models/user.model";
 import ProjectsModel from "@/models/Projects.model";
+import { connectDB } from "@/utils/connectDb";
 
 export async function POST(request) {
   try {
-    await connectDb();
+    await connectDB();
 
     const { studentId, projectId } = await request.json();
 
     const student = await User.findById(studentId);
     const project = await ProjectsModel.findById(projectId);
 
-    if (!student || !project) {
+
+    if (!student) {
       return NextResponse.json(
-        { error: "Student or Project not found" },
+        { error: "Student not found" },
+        { status: 404 }
+      );
+    }
+
+    if (!project) {
+      return NextResponse.json(
+        { error: "Project not found" },
         { status: 404 }
       );
     }
