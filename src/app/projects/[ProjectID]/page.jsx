@@ -63,7 +63,7 @@ const ProjectDetailPage = () => {
   const params = useParams();
   const [projects, setProjects] = useState(projectData);
   const [projectId] = useState(params.ProjectID);
-
+ 
   useEffect(() => {
     fetchProject();
   }, []);
@@ -74,7 +74,7 @@ const ProjectDetailPage = () => {
       const project = await axios.post("/api/projects/getProjectbyId", {_id});
       if(project.data.project === null){
         console.log("Project not found");
-        setProjects(projectData);
+        setProjects(project.data.project);
       } else {
         setProjects(project.data.project);
       }

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useRouter } from 'next/navigation';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import axios from 'axios';
 const ProjectLanding = () => {
@@ -17,6 +18,7 @@ const ProjectLanding = () => {
   const [error, setError] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [industries, setIndustries] = useState(['All']);
+  const router = useRouter()
   useEffect(() => {
     const fetchProjects = async () => {
       console.log("start");
@@ -325,19 +327,19 @@ const ProjectLanding = () => {
                     </div>
                   </div>
 
-                  <motion.div 
-                    whileHover={{ scale: 1.02 }} 
-                    whileTap={{ scale: 0.98 }}
+                  <div 
+                    
                     onClick={(e) => {
                       e.stopPropagation();
-                      openProjectDetails(project);
+                      console.log(project._id)
+                      router.push(`/pmonfrojects/${project._id}`)
                     }}
                   >
                     <Button className="w-full mt-4 group-hover:bg-primary/90">
                       <span>View Details</span>
                       <ChevronRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
                     </Button>
-                  </motion.div>
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
@@ -429,7 +431,7 @@ const ProjectLanding = () => {
                   Close
                 </Button>
                 <Button 
-                  className="w-full sm:w-auto"
+                  className="w-full sm:w-auto" onClick={()=>Router.push()}
                 >
                   Apply Now
                 </Button>

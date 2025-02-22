@@ -1,67 +1,98 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import axios from 'axios';
+import { useRouter, useSearchParams } from "next/navigation";
+import axios from "axios";
 
-const skills = ["React.js", "Node.js", "Figma", "Python", "AI"];
-
-export default function JoinProject() {
-  const [selectedSkill, setSelectedSkill] = useState("");
-  const [aiResponse, setAiResponse] = useState("");
+export default function SkillTest() {
+  const searchParams = useSearchParams();
+  const selectedSkill = searchParams.get("skill");
+  const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState({});
+  const [score, setScore] = useState(null);
+  const [passed, setPassed] = useState(null);
   const router = useRouter();
 
-  const handleNext = () => {
+  useEffect(() => {
     if (selectedSkill) {
-      router.push('/SkillTest');
+      fetchQuestions();
+    }
+  }, [selectedSkill]);
+
+  const fetchQuestions = async () => {
+    try {
+      const response = await axios.post("/api/gemini", { prompt: `Generate 10 multiple-choice questions for React js` });
+      console.log(response);
+      setQuestions(response.data.questions);
+    } catch (error) {
+      console.error("Error fetching questions:", error);
     }
   };
 
-  const handleSkillSelect = async (skill) => {
-    setSelectedSkill(skill);
-    try {
-      const response = await axios.post('/api/gemini', { prompt: `Tell me about ${skill}` });
-      setAiResponse(response.data.text);
-    } catch (error) {
-      console.error("Error fetching AI response:", error);
-    }
+  const handleSelect = (index, option) => {
+    setAnswers({ ...answers, [index]: option });
+  };
+
+  const handleSubmit = () => {
+    let correctAnswers = 0;
+    questions.forEach((q, index) => {
+      if (answers[index] === q.answer) {
+        correctAnswers++;
+      }
+    });
+
+    const calculatedScore = (correctAnswers / questions.length) * 100;
+    setScore(calculatedScore);
+    setPassed(calculatedScore >= 70);
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold mb-4 text-gray-800">Join Project Team</h1>
-      <p className="text-gray-600 mb-6 text-center">Select a skill to proceed:</p>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {skills.map((skill) => (
+      <h1 className="text-2xl font-bold text-gray-800">Skill Test - {selectedSkill}</h1>
+      {questions.length === 0 ? (
+        <p className="text-gray-600 mt-4">Loading questions...</p>
+      ) : (
+        <div className="w-full max-w-2xl bg-white p-6 rounded-lg shadow-md mt-4">
+          {questions.map((q, index) => (
+            <div key={index} className="mb-4">
+              <p className="font-medium">{index + 1}. {q.question}</p>
+              <div className="flex flex-col">
+                {q.options.map((option, i) => (
+                  <label key={i} className="mt-1">
+                    <input
+                      type="radio"
+                      name={`question-${index}`}
+                      value={option}
+                      checked={answers[index] === option}
+                      onChange={() => handleSelect(index, option)}
+                      className="mr-2"
+                    />
+                    {option}
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
+
           <button
-            key={skill}
-            className={`px-6 py-3 border rounded-lg text-lg font-medium transition duration-300 ${
-              selectedSkill === skill
-                ? "bg-blue-600 text-white shadow-lg"
-                : "bg-white hover:bg-gray-200"
-            }`}
-            onClick={() => handleSkillSelect(skill)}
+            onClick={handleSubmit}
+            className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
           >
-            {skill}
+            Submit Test
           </button>
-        ))}
-      </div>
-      {aiResponse && (
-        <div className="mt-4 p-4 bg-white rounded-lg shadow-md">
-          <p className="text-gray-800">{aiResponse}</p>
+
+          {score !== null && (
+            <div className="mt-4">
+              <p className="text-lg font-bold">Your Score: {score}%</p>
+              {passed ? (
+                <p className="text-green-600 font-bold">Congratulations! You are assigned to the project.</p>
+              ) : (
+                <p className="text-red-600 font-bold">You failed. Try again!</p>
+              )}
+            </div>
+          )}
         </div>
       )}
-      <button
-        className={`mt-6 px-6 py-3 text-lg font-medium rounded-lg transition ${
-          selectedSkill
-            ? "bg-blue-500 text-white hover:bg-blue-700"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-        }`}
-        disabled={!selectedSkill}
-        onClick={handleNext}
-      >
-        Next
-      </button>
     </div>
   );
 }
