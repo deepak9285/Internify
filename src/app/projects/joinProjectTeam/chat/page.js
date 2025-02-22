@@ -144,20 +144,255 @@ export default function AIProjectManager() {
                 <ProjectPlanTable />
               </section>
               <section className="mt-12">
-                <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-                  Generated Project Plan
-                </h2>
-                <div className="prose prose-lg max-w-none">
-                  <ReactMarkdown>{response}</ReactMarkdown>
+                <div className="bg-white shadow-xl rounded-xl p-6">
+                  <div className="flex justify-between items-center border-b pb-3">
+                    <h2 className="text-3xl font-bold text-gray-800">
+                      Generated Project Plan
+                    </h2>
+                    <button
+                      onClick={() => navigator.clipboard.writeText(response)}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                    >
+                      Copy Plan
+                    </button>
+                    
+                  </div>
+                  <div className="mt-6">
+                    <GeneratedPlanContent response={response} />
+                  </div>
                 </div>
               </section>
+              <TeamOverview />
             </>
           )}
+
+
         </div>
       </main>
     </div>
   );
 }
+
+function GeneratedPlanContent({ response }) {
+  // If the response doesn't include markdown section headings ("##"), show the whole plan.
+  if (!response.includes("## ")) {
+    return (
+      <div className="prose prose-lg">
+        <ReactMarkdown>{response}</ReactMarkdown>
+      </div>
+    );
+  }
+  // Split the markdown content into sections based on headings (assumes sections start with "##")
+  const sections = response.split(/\n(?=##\s)/);
+  return (
+    <div className="space-y-4">
+      {sections.map((section, idx) => {
+        const lines = section.split("\n");
+        let title = lines[0];
+        let content = lines.slice(1).join("\n");
+        if (title.startsWith("##")) {
+          title = title.replace(/^##\s*/, "");
+        } else {
+          title = "Overview";
+          content = section;
+        }
+        return <Accordion key={idx} title={title} content={content} />;
+      })}
+    </div>
+  );
+}
+
+function Accordion({ title, content }) {
+  const [isOpen, setIsOpen] = useState(true);
+  return (
+    <div className="border rounded-lg">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full px-4 py-2 text-left bg-gray-100 hover:bg-gray-200 transition"
+      >
+        <div className="flex justify-between items-center">
+          <span className="text-xl font-semibold text-gray-800">
+            {title}
+          </span>
+          <span className="text-gray-600">{isOpen ? "-" : "+"}</span>
+        </div>
+      </button>
+      {isOpen && (
+        <div className="px-4 py-2">
+          <div className="prose prose-lg">
+            <ReactMarkdown>{content}</ReactMarkdown>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TeamOverview() {
+  // You can derive these values from your project data.
+  const totalTeam = 5;
+  const remaining = 2;
+  const assigned = totalTeam - remaining;
+
+  return (
+    <div className="bg-white shadow-xl rounded-xl p-6 mt-12">
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">Team Overview</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Team Size Card */}
+        <div className="bg-gray-50 p-4 rounded-lg shadow">
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">Team Size</h3>
+          <p className="text-gray-600">{totalTeam} Members</p>
+          <div className="mt-2">
+            <div className="h-4 w-full bg-gray-300 rounded-full">
+              <div
+                className="h-4 bg-blue-600 rounded-full"
+                style={{ width: `${(assigned / totalTeam) * 100}%` }}
+              ></div>
+            </div>
+            <p className="text-sm text-gray-500 mt-1">
+              {assigned} filled, {remaining} positions open
+            </p>
+          </div>
+        </div>
+        {/* Team Roles (To be Assigned) Card */}
+        <div className="bg-gray-50 p-4 rounded-lg shadow">
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">Team Roles (To be Assigned)</h3>
+          <ul className="list-disc list-inside text-gray-600">
+            <li>
+              <span className="font-medium">Data Scientist (1):</span> Focus on model building, training, and evaluation.
+            </li>
+            <li>
+              <span className="font-medium">Frontend Developer (1):</span> Responsible for designing the UI.
+            </li>
+          </ul>
+        </div>
+        {/* Existing Team Members Card */}
+        <div className="bg-gray-50 p-4 rounded-lg shadow">
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">Existing Team Members</h3>
+          <ul className="space-y-2">
+            <li className="flex items-center">
+              <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center mr-2">
+                M1
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">Member 1 Name</p>
+                <p className="text-sm text-gray-500">Backend Developer</p>
+              </div>
+            </li>
+            <li className="flex items-center">
+              <div className="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center mr-2">
+                M2
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">Member 2 Name</p>
+                <p className="text-sm text-gray-500">Project Architect/Team Lead</p>
+              </div>
+            </li>
+            <li className="flex items-center">
+              <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center mr-2">
+                M3
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">Member 3 Name</p>
+                <p className="text-sm text-gray-500">DevOps Engineer</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InteractiveProjectPlan({ response }) {
+  // Split the response by markdown headings ("##"). If none exist, display the full plan.
+  const sections = response.includes("##")
+    ? response.split(/\n(?=##\s)/)
+    : [response];
+
+  // Display each section as an interactive flip card in a responsive grid.
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {sections.map((section, idx) => {
+        const lines = section.split("\n");
+        let title = lines[0];
+        let content = lines.slice(1).join("\n");
+        if (title.startsWith("##")) {
+          title = title.replace(/^##\s*/, "");
+        } else {
+          title = "Overview";
+          content = section;
+        }
+        return (
+          <FlipCard key={idx} title={title} content={content} />
+        );
+      })}
+    </div>
+  );
+}
+
+function FlipCard({ title, content }) {
+  const [flipped, setFlipped] = useState(false);
+
+  return (
+    <div
+      className="w-full h-full"
+      style={{ perspective: "1000px" }} // Enables 3D effect
+    >
+      <div
+        className={`relative w-full h-full transition-transform duration-700 transform ${
+          flipped ? "rotate-y-180" : ""
+        }`}
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        {/* Front Side */}
+        <div
+          className="absolute inset-0 bg-white rounded-lg shadow p-6 backface-hidden flex flex-col justify-between cursor-pointer"
+          style={{ WebkitBackfaceVisibility: "hidden", backfaceVisibility: "hidden" }}
+          onClick={() => setFlipped(true)}
+        >
+          <h3 className="text-2xl font-bold text-gray-800">{title}</h3>
+          <div className="mt-4 text-gray-600">
+            <ReactMarkdown>
+              {content.substring(0, 100) + (content.length > 100 ? "..." : "")}
+            </ReactMarkdown>
+          </div>
+          <button
+            className="mt-4 self-end bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+            onClick={(e) => {
+              e.stopPropagation();
+              setFlipped(true);
+            }}
+          >
+            View Details
+          </button>
+        </div>
+        {/* Back Side */}
+        <div
+          className="absolute inset-0 bg-white rounded-lg shadow p-6 backface-hidden transform rotate-y-180 flex flex-col justify-between overflow-y-auto"
+          style={{ WebkitBackfaceVisibility: "hidden", backfaceVisibility: "hidden" }}
+          onClick={() => setFlipped(false)}
+        >
+          <h3 className="text-2xl font-bold text-gray-800 mb-2">{title} Details</h3>
+          <div className="text-gray-600" style={{ maxHeight: "300px" }}>
+            <ReactMarkdown>{content}</ReactMarkdown>
+          </div>
+          <button
+            className="mt-4 self-end bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
+            onClick={(e) => {
+              e.stopPropagation();
+              setFlipped(false);
+            }}
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 
 function ProjectPlanTable() {
   return (
