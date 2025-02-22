@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI('AIzaSyA8l7ivFdyYSygG_1vJJ6Gmr_WoOPVr0Fg');
 
@@ -11,14 +11,8 @@ export default async function handler(req, res) {
   const { prompt } = req.body;
 
   try {
-    const history = [];
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-    const chat = model.startChat({
-      history,
-      generationConfig: { maxOutputTokens: 100 },
-    });
-
-    const result = await chat.sendMessage(prompt);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const result = await model.generateContent(prompt);
     const text = result.response.text;
 
     res.status(200).json({ text });
