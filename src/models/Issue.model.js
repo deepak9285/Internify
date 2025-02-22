@@ -11,14 +11,13 @@ const IssueSchema = new mongoose.Schema({
     ref: "Project",
     required: true,
   },
-  task_id:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Task",
-    required: true
-  },
-  title:{
+  title: {
     type: String,
     required: true,
+  },
+  completed: {
+    type: Boolean,
+    default: false,
   },
   desc: { type: String, required: true },
   issueCategory: { type: String, required: true },
