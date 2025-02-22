@@ -10,8 +10,7 @@ export default function JoinProject() {
 
   const handleNext = () => {
     if (selectedSkill) {
-      router.push('/SkillTest'); // Fix: Encode skill in URL
-    }
+      router.push('/projects/joinProjectTeam/SkillTest'); 
   };
 
   return (

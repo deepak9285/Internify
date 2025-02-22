@@ -1,32 +1,29 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-export async function POST(req) {
+const genAI = new GoogleGenerativeAI('AIzaSyA8l7ivFdyYSygG_1vJJ6Gmr_WoOPVr0Fg');
+
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    res.status(405).json({ error: "Method not allowed" });
+    return;
+  }
+
+  const { prompt } = req.body;
+
   try {
-    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const history = [];
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const chat = model.startChat({
+      history,
+      generationConfig: { maxOutputTokens: 100 },
+    });
 
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: "Missing API Key" }), { status: 500 });
-    }
+    const result = await chat.sendMessage(prompt);
+    const text = result.response.text;
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
-    const prompt = `Generate 10 multiple-choice questions on react js. 
-    Each question should have 4 options with one correct answer.
-    Format:
-    [
-      { "question": "What is React?", "options": ["Library", "Framework", "Language", "Database"], "answer": "Library" },
-      ...
-    ]`;
-
-    const result = await model.generateContent(prompt);
-    console.log(result);
-    const content = await result.response.getContent();
-    const questions = JSON.parse(content);
-
-    return new Response(JSON.stringify({ questions }), { status: 200 });
+    res.status(200).json({ text });
   } catch (error) {
-    console.error("Gemini API Error:", error);
-    return new Response(JSON.stringify({ error: "API Request Failed" }), { status: 500 });
+    console.error("Error calling Gemini:", error);
+    res.status(500).json({ error: error.message });
   }
 }
