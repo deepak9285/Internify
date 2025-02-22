@@ -56,7 +56,7 @@ export function LoginForm({ className, ...props }) {
       console.log(response.data.user);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       localStorage.setItem('token', response.data.user.token);
-      router.push("/");
+      router.push("/home");
     } catch (error) {
       console.error('Login failed:', error.response ? error.response.data : error.message);
       setError(error.response?.data?.message || 'An error occurred during login.');

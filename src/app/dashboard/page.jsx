@@ -330,6 +330,7 @@ const Dashboard = () => {
               <Plus className="h-4 w-4 mr-1" /> New Task
             </Button>
             <Button size="sm">AI Assistant</Button>
+            <Button onClick={()=>router.push('/dashboard')} size="sm">User Dashboard</Button>
           </div>
         </header>
 
