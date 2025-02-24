@@ -84,6 +84,7 @@ const HomePage = () => {
           </div>
 
           <div className="ml-auto flex items-center gap-4">
+            <Button onClick={()=>router.push("/projects")}>Projects</Button>
             <Button onClick={() => router.push("/dashboard")}>Dashboard</Button>
             <Button variant="ghost" size="icon">
               <Bell className="h-5 w-5" />

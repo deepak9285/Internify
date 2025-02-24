@@ -59,8 +59,6 @@ const CreateIssuePage = () => {
       fetchProjects();
     }
   }, [userId]);
-
-  // Set user ID in form data
   useEffect(() => {
     if (userId) {
       setFormData(prev => ({
@@ -101,6 +99,7 @@ const CreateIssuePage = () => {
     try {
         console.log(formData);
       const response = await axios.post('/api/issue/createIssue', formData);
+      if(response.status===201)  alert(response.message);
       router.refresh(); // Refresh the server components
     } catch (error) {
       console.error('Error creating issue:', error);

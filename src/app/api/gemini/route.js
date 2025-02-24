@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
   try {
     const history = [];
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
     const chat = model.startChat({
       history,
       generationConfig: { maxOutputTokens: 100 },
@@ -26,4 +26,4 @@ export default async function handler(req, res) {
     console.error("Error calling Gemini:", error);
     res.status(500).json({ error: error.message });
   }
-}
+}gemi
