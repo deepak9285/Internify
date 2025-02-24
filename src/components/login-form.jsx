@@ -123,7 +123,7 @@ export function LoginForm({ className, ...props }) {
                       id="email"
                       type="email"
                       placeholder="m@example.com"
-                      required
+                      // required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       onFocus={() => handleFocus('email')}
@@ -168,7 +168,7 @@ export function LoginForm({ className, ...props }) {
                       id="password"
                       type="password"
                       placeholder="Enter your password"
-                      required
+                      // required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       onFocus={() => handleFocus('password')}
