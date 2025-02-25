@@ -2,15 +2,19 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import axios from "axios";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI("AIzaSyA8l7ivFdyYSygG_1vJJ6Gmr_WoOPVr0Fg");
 
 export default function SkillTest() {
   const searchParams = useSearchParams();
-  const selectedSkill = searchParams.get("skill");
+  const selectedSkill = "Reactjs";
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(null);
   const [passed, setPassed] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,17 +24,48 @@ export default function SkillTest() {
   }, [selectedSkill]);
 
   const fetchQuestions = async () => {
+    setLoading(true);
+    setError(null);
+
+    const prompt = `Generate 10 multiple-choice questions on "${selectedSkill}". 
+    Each question should have 4 options and 1 correct answer. 
+    Format the response as a **valid JSON array** with the structure:
+    [
+      {
+        "question": "Question text",
+        "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+        "answer": "Correct option"
+      }
+    ]`;
+
     try {
-      const response = await axios.post("/api/gemini", { prompt: `Generate 10 multiple-choice questions for React js` });
-      console.log(response);
-      setQuestions(response.data.questions);
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const result = await model.generateContent(prompt);
+      const text = await result.response.text();
+
+      console.log("Raw API Response:", text); // Debugging output
+
+      // Extract JSON if extra text is present
+      const jsonMatch = text.match(/\[.*\]/s);
+      if (!jsonMatch) throw new Error("Invalid response format");
+
+      const jsonResponse = JSON.parse(jsonMatch[0]);
+
+      if (Array.isArray(jsonResponse) && jsonResponse.length === 10) {
+        setQuestions(jsonResponse);
+      } else {
+        throw new Error("API returned incorrect format");
+      }
     } catch (error) {
       console.error("Error fetching questions:", error);
+      setError("Failed to load questions. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSelect = (index, option) => {
-    setAnswers({ ...answers, [index]: option });
+    setAnswers((prev) => ({ ...prev, [index]: option }));
   };
 
   const handleSubmit = () => {
@@ -49,9 +84,11 @@ export default function SkillTest() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
       <h1 className="text-2xl font-bold text-gray-800">Skill Test - {selectedSkill}</h1>
-      {questions.length === 0 ? (
-        <p className="text-gray-600 mt-4">Loading questions...</p>
-      ) : (
+
+      {loading && <p className="text-gray-600 mt-4">Loading questions...</p>}
+      {error && <p className="text-red-600 mt-4">{error}</p>}
+
+      {!loading && !error && questions.length > 0 && (
         <div className="w-full max-w-2xl bg-white p-6 rounded-lg shadow-md mt-4">
           {questions.map((q, index) => (
             <div key={index} className="mb-4">

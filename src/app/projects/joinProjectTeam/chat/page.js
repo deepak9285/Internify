@@ -10,7 +10,6 @@ export default function AIProjectManager() {
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Temporary data (replace or fetch these as needed)
   const tempData = {
     task: {
       assignee_id: "65d7a8c5f4a2b9e3d1c0a123",
@@ -56,7 +55,7 @@ export default function AIProjectManager() {
       updatedAt: "2025-02-22T12:00:00.000Z"
     },
     users: [
-      // user data (omit sensitive information in production)
+      
     ]
   };
 
@@ -73,7 +72,7 @@ export default function AIProjectManager() {
       ", "
     )}. The project deadline is ${tempData.project.deadline}. The team size is ${tempData.project.TotalteamMembersRequired} with ${tempData.project.RemainingMembers} member(s) remaining to be assigned. The tasks include: ${taskDescriptions}. The project documents are available at: ${tempData.project.documents.join(
       ", "
-    )}. The project repository is located at ${tempData.project.repo.url}.`;
+    )}.The project repository is located at ${tempData.project.repo.url}.`;
 
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -90,7 +89,7 @@ export default function AIProjectManager() {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-r from-indigo-500 to-purple-600 flex flex-col">
-      {/* Header */}
+   
       <header className="w-full py-6 text-center">
         <h1 className="text-4xl font-extrabold text-white">
           AI Project Manager
