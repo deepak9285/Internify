@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import TaskProgress from "@/models/TaskProgress";
+import TaskProgress from "@/models/TaskProgressSchema.model";
 import ProjectsModel from "@/models/Projects.model";
 
 export async function POST(req, { params }) {

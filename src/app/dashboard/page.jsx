@@ -148,9 +148,12 @@ const Dashboard = () => {
     project_id: '',
     task_id: '',
   });
-
-  const user = JSON.parse(localStorage.getItem('user'));
-  const [userId, setUserId] = useState(user._id);
+let user;
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUserId(user?._id || '');
+  }, []);
+  const [userId, setUserId] = useState(user?._id);
 
   const fetchProject = async () => {
     try {

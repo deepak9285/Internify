@@ -26,10 +26,12 @@ const CreateIssuePage = () => {
 
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [userId, setUserId] = useState('');
 
-  // Fetch user ID from localStorage
-  const user = JSON.parse(localStorage.getItem("user"));
-  const [userId, setUserId] = useState(user?._id || '');
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUserId(user?._id || '');
+  }, []);
 
   // Fetch projects assigned to the user
   const fetchProjects = async () => {

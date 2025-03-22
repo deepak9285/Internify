@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import Project from "@/models/Project";
+import Project from "@/models/Projects.model";
 
 export async function GET(req, { params }) {
     try {

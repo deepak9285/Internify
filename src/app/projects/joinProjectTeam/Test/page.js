@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI("AIzaSyA8l7ivFdyYSygG_1vJJ6Gmr_WoOPVr0Fg");
 
 export default function SkillTest() {
-  const searchParams = useSearchParams();
+
   const selectedSkill = "Reactjs";
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});

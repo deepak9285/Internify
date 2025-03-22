@@ -1,8 +1,9 @@
-import { useRouter } from "next/router";
+'use client'
+import { useRouter } from "next/navigation";
 
 const Result = () => {
   const router = useRouter();
-  const { passed } = router.query;
+ const passed="true";
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-100">

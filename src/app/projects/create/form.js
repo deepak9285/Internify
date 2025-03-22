@@ -1,14 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { createProject } from "@/app/services/projectService";
 import { useRouter } from "next/navigation"; // Redirect after form submission
 
 export default function ProjectForm() {
   const router = useRouter();
+const [userId, setUserId] = useState("");
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user._id);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUserId(user?._id || '');
+  }, []);
+
 
   const [form, setForm] = useState({
     title: "",
@@ -19,7 +24,7 @@ export default function ProjectForm() {
     skills_required: "",
     deadline: "",
     TotalTeamMembersRequired: "",
-    _id: user._id,
+    _id: userId,
   });
 
   const [filePreview, setFilePreview] = useState([]);
@@ -54,7 +59,7 @@ export default function ProjectForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const userId = localStorage.getItem("user")._id;
+    
     const formattedData = {
       ...form,
       skills_required: form.skills_required.split(",").map((s) => s.trim()),

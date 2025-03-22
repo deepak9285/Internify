@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { raiseIssue } from "@/services/issueService";
+// import { raiseIssue } from "@/services/issueService";
 
 export default function IssueForm({ projectId, onIssueCreated }) {
   const [form, setForm] = useState({
@@ -21,20 +21,20 @@ export default function IssueForm({ projectId, onIssueCreated }) {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const response = await raiseIssue(projectId, form);
-      if (response.success) {
-        alert("Issue Raised Successfully!");
-        onIssueCreated((prevIssues) => [...prevIssues, response.issue]);
-        setForm({ title: "", description: "", assignedRole: "Frontend Developer", priority: "Medium" });
-      } else {
-        alert("Failed to raise issue: " + response.error);
-      }
-    } catch (error) {
-      alert("Error: " + error.message);
-    } finally {
-      setLoading(false);
-    }
+  //   try {
+  //     const response = await raiseIssue(projectId, form);
+  //     if (response.success) {
+  //       alert("Issue Raised Successfully!");
+  //       onIssueCreated((prevIssues) => [...prevIssues, response.issue]);
+  //       setForm({ title: "", description: "", assignedRole: "Frontend Developer", priority: "Medium" });
+  //     } else {
+  //       alert("Failed to raise issue: " + response.error);
+  //     }
+  //   } catch (error) {
+  //     alert("Error: " + error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
   };
 
   return (
